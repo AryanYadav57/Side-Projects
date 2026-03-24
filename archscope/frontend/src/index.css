@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #0d1117;
+  --panel-bg: rgba(22, 27, 34, 0.6);
+  --border-color: #30363d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent: #58a6ff;
+  --accent-hover: #3182ce;
+  --folder-color: #e3b341;
+  --file-color: #8b949e;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: radial-gradient(circle at 10% 20%, rgba(38, 43, 52, 0.4) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(38, 43, 52, 0.4) 0%, transparent 40%);
+  min-height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.custom-link {
+  stroke: rgba(59, 130, 246, 0.5) !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+  stroke-dasharray: 6 6 !important;
+  animation: dataFlow 1s linear infinite !important;
+}
+
+@keyframes dataFlow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.architect-node {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-family: "system-ui", -apple-system, sans-serif !important;
+  font-size: 14px !important;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.15) !important;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(8px);
+}
+
+.architect-node:hover {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.3) !important;
+  border-color: rgba(59, 130, 246, 0.8) !important;
+}
+
+.architect-link .react-flow__edge-path {
+  stroke: rgba(96, 165, 250, 0.5) !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: 6 6 !important;
+  animation: dataFlow 1s linear infinite !important;
+}

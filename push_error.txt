@@ -1,0 +1,7 @@
+remote: error: Trace: 7f5d2ec0776937622a2eb8db1f17459f9e00151388abc5f9e1c14832a8f5a8fe        
+remote: error: See https://gh.io/lfs for more information.        
+remote: error: File archscope/backend/uploads/33d20f589dd9ffff8a422acdcbdc8b13 is 871.57 MB; this exceeds GitHub's file size limit of 100.00 MB        
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+To https://github.com/AryanYadav57/Side-Projects.git
+ ! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/AryanYadav57/Side-Projects.git'
