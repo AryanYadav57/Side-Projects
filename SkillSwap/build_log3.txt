@@ -1,0 +1,96 @@
+﻿> Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:shared:compileJava NO-SOURCE
+> Task :gradle-plugin:shared:processResources NO-SOURCE
+> Task :gradle-plugin:shared:classes UP-TO-DATE
+> Task :gradle-plugin:shared:jar UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:settings-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:jar UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:react-native-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:jar UP-TO-DATE
+
+[Incubating] Problems report is available at: file:///E:/ARYAN/SkillSwap/android/build/reports/problems/problems-report.html
+.\gradlew.bat : 
+At line:1 char:1
++ .\gradlew.bat 
+assembleDebug 2>&1 | 
+Out-File -FilePath 
+e:\ARYAN\SkillS ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (:String) [],    
+ RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+FAILURE: Build failed 
+with an exception.
+
+* Where:
+Build file 'E:\ARYAN\Sk
+illSwap\node_modules\re
+act-native-reanimated\a
+ndroid\build.gradle' 
+line: 342
+
+* What went wrong:
+A problem occurred 
+evaluating project ':re
+act-native-reanimated'.
+> [Reanimated] `react-n
+ative-worklets` 
+library not found. 
+Please install it as a 
+dependency in your 
+project. Install `react
+-native-worklets` with 
+your package manager, 
+i.e. `yarn add 
+react-native-worklets` 
+or `npm i react-native-
+worklets`. Read the 
+documentation for more 
+details: https://docs.s
+wmansion.com/react-nati
+ve-reanimated/docs/guid
+es/troubleshooting#unab
+le-to-find-a-specificat
+ion-for-rnworklets-depe
+nded-upon-by-rnreanimat
+ed
+
+* Try:
+> Run with 
+--stacktrace option to 
+get the stack trace.
+> Run with --info or 
+--debug option to get 
+more log output.
+> Run with --scan to 
+generate a Build Scan 
+(Powered by 
+Develocity).
+> Get more help at http
+s://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 5s
+10 actionable tasks: 10 up-to-date
