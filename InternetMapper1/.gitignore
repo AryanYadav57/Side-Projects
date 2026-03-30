@@ -1,8 +1,10 @@
 venv/
 env/
+.venv/
 __pycache__/
 *.pyc
 .DS_Store
 .env
 .gemini/
 brain/
+node_modules/
