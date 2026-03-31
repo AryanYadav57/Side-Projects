@@ -1,29 +1,25 @@
 import spacy
+from backend.services.nlp_engine import get_nlp
 from typing import List, Dict
 
-try:
-    nlp = spacy.load("en_core_web_sm")
-    # Add custom entity ruler for niche topics
-    if "entity_ruler" not in nlp.pipe_names:
-        ruler = nlp.add_pipe("entity_ruler", before="ner")
-        patterns = [
-            # Fashion & Archive
-            {"label": "ORG", "pattern": "Number (N)ine"},
-            {"label": "ORG", "pattern": "Maison Margiela"},
-            {"label": "ORG", "pattern": "Undercover"},
-            {"label": "ORG", "pattern": "Vetements"},
-            {"label": "ORG", "pattern": "Rick Owens"},
-            {"label": "ORG", "pattern": "Raf Simons"},
-            {"label": "ORG", "pattern": "Yohji Yamamoto"},
-            {"label": "ORG", "pattern": "Comme des Garçons"},
-            # Underground Music
-            {"label": "PERSON", "pattern": "Nettspend"},
-            {"label": "PERSON", "pattern": "Fakemink"},
-            {"label": "PERSON", "pattern": "Llondonactress"},
-        ]
-        ruler.add_patterns(patterns)
-except OSError:
-    raise RuntimeError("Run: python -m spacy download en_core_web_sm")
+nlp = get_nlp()
+# Add custom entity ruler for niche topics
+if "entity_ruler" not in nlp.pipe_names:
+    ruler = nlp.add_pipe("entity_ruler", before="ner")
+    patterns = [
+        {"label": "ORG", "pattern": "Number (N)ine"},
+        {"label": "ORG", "pattern": "Maison Margiela"},
+        {"label": "ORG", "pattern": "Undercover"},
+        {"label": "ORG", "pattern": "Vetements"},
+        {"label": "ORG", "pattern": "Rick Owens"},
+        {"label": "ORG", "pattern": "Raf Simons"},
+        {"label": "ORG", "pattern": "Yohji Yamamoto"},
+        {"label": "ORG", "pattern": "Comme des Garçons"},
+        {"label": "PERSON", "pattern": "Nettspend"},
+        {"label": "PERSON", "pattern": "Fakemink"},
+        {"label": "PERSON", "pattern": "Llondonactress"},
+    ]
+    ruler.add_patterns(patterns)
 
 # Entity types we extract and their friendly display names
 ENTITY_TYPE_MAP = {
@@ -42,6 +38,43 @@ ENTITY_TYPE_MAP = {
 RELEVANT_TYPES = set(ENTITY_TYPE_MAP.keys())
 
 
+def extract_entities_from_doc(doc: spacy.tokens.Doc) -> List[Dict[str, str]]:
+    """
+    Extract named entities from a pre-processed spaCy doc.
+    """
+    # Count occurrences to pick the most common form
+    counts: Dict[str, int] = {}
+    canonical: Dict[str, str] = {}  # lowered → original casing
+    types: Dict[str, str] = {}
+
+    for ent in doc.ents:
+        if ent.label_ not in RELEVANT_TYPES:
+            continue
+        raw = ent.text.strip()
+        if len(raw) < 2:
+            continue
+        key = raw.lower()
+        counts[key] = counts.get(key, 0) + 1
+        if key not in canonical:
+            canonical[key] = raw
+        if key not in types:
+            types[key] = ent.label_
+
+    # Build output sorted by count descending, capped at 35 entities (faster)
+    sorted_keys = sorted(counts.keys(), key=lambda k: -counts[k])[:35]
+
+    result = []
+    for key in sorted_keys:
+        label = canonical[key]
+        result.append({
+            "id": label,
+            "label": label,
+            "entity_type": types.get(key, "UNKNOWN"),
+        })
+
+    return result
+
+
 def extract_entities(text: str) -> List[Dict[str, str]]:
     """
     Extract named entities from text using spaCy NER.
@@ -49,10 +82,10 @@ def extract_entities(text: str) -> List[Dict[str, str]]:
 
     Improvements over Phase 1:
     - Returns entity type alongside each entity
-    - Deduplicates case-insensitively (keeps most-common casing)
     - Filters short/noisy tokens
     """
-    doc = nlp(text[:40_000])
+    doc = nlp(text[:25_000])
+    return extract_entities_from_doc(doc)
 
     # Count occurrences to pick the most common form
     counts: Dict[str, int] = {}

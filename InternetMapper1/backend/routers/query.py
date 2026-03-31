@@ -1,25 +1,47 @@
 from collections import deque
 from fastapi import APIRouter, HTTPException
+from typing import Dict, Any
 
-from models.schemas import (
+from backend.models.schemas import (
     QueryRequest, QueryResponse,
     GraphResponse, Node, Edge,
     ExplainResponse,
     PathRequest, PathResponse, PathStep,
 )
-from services.wikipedia_service import fetch_wikipedia_content
-from services.text_cleaner import clean_text
-from nlp.entity_extractor import extract_entities
-from nlp.relationship_builder import build_relationships
-from nlp.entity_deduplicator import deduplicate_entities, apply_dedup_to_edges
-from nlp.entity_ranker import rank_entities
+from backend.services.wikipedia_service import fetch_wikipedia_content
+from backend.services.text_cleaner import clean_text
+from backend.nlp.entity_extractor import nlp, extract_entities_from_doc
+from backend.nlp.relationship_builder import build_relationships_from_doc
+from backend.services.cache_service import cache
+from backend.services.music_service import fetch_music_links, fetch_discography_snippet
+from backend.services.ai_service import generate_graph_insight
+from backend.nlp.entity_deduplicator import deduplicate_entities, apply_dedup_to_edges
+from backend.nlp.entity_ranker import rank_entities
 
 router = APIRouter()
 
-# ── Simple in-memory cache ────────────────────────────────────
-# Keyed by normalised topic string. Lives for the process lifetime.
-# Use a TTL-aware cache (e.g. cachetools) in production.
-_graph_cache: dict = {}
+# ── Caching ────────────────────────────────────
+# The SQLite cache provides persistence across server restarts.
+
+def detect_category(topic: str, text: str) -> str:
+    """Simple keyword-based category detection."""
+    t = topic.lower()
+    txt = text.lower()[:2000]
+    
+    # Fashion: includes 'archive' and 'brand'
+    f_k = ["fashion", "clothing", "brand", "archive", "runway", "couture", "designer", "collection"]
+    # Music: includes 'rapper' and 'album'
+    m_k = ["music", "album", "artist", "single", "band", "rap", "hip hop", "rapper", "singer", "label", "record"]
+    # Science/Technology
+    s_k = ["science", "computer", "quantum", "physics", "biology", "dna", "space", "astronomy", "research", "technology", "artificial intelligence"]
+    
+    if any(k in t for k in f_k) or any(k in txt for k in f_k):
+        return "FASHION"
+    if any(k in t for k in m_k) or any(k in txt for k in m_k):
+        return "MUSIC"
+    if any(k in t for k in s_k) or any(k in txt for k in s_k):
+        return "SCIENCE"
+    return "DEFAULT"
 
 
 @router.post("/query", response_model=QueryResponse, summary="Fetch cleaned Wikipedia text")
@@ -52,8 +74,9 @@ def build_graph(request: QueryRequest):
       9. Return enriched graph JSON
     """
     cache_key = request.topic.strip().lower()
-    if cache_key in _graph_cache:
-        return _graph_cache[cache_key]
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
 
     try:
         data = fetch_wikipedia_content(request.topic, deep_search=request.deep_search)
@@ -62,8 +85,12 @@ def build_graph(request: QueryRequest):
 
     cleaned = clean_text(data["text"])
 
-    # Step 1: extract entities (returns list of {id, label, entity_type})
-    raw_entities = extract_entities(cleaned)
+    # OPTIMIZATION: Process text into a spaCy Doc only once
+    # and cap at 25k characters for a massive speed boost.
+    doc = nlp(cleaned[:25_000])
+
+    # Step 1: extract entities
+    raw_entities = extract_entities_from_doc(doc)
 
     if not raw_entities:
         raise HTTPException(
@@ -71,11 +98,11 @@ def build_graph(request: QueryRequest):
             detail="No entities could be extracted from this topic's Wikipedia page."
         )
 
-    # Step 2: deduplicate (e.g. "Turing" → "Alan Turing")
+    # Step 2: deduplicate
     entities, dedup_map = deduplicate_entities(raw_entities, topic=data["title"])
 
     # Step 3: build typed relationships
-    raw_edges = build_relationships(cleaned, entities)
+    raw_edges = build_relationships_from_doc(doc, entities)
 
     # Step 4: remap edges through dedup, remove self-loops & duplicates
     edges = apply_dedup_to_edges(raw_edges, dedup_map)
@@ -98,8 +125,8 @@ def build_graph(request: QueryRequest):
         for ed in edges
     ]
 
-    result = GraphResponse(nodes=nodes, edges=edge_objects, topic=data["title"])
-    _graph_cache[cache_key] = result
+    result = GraphResponse(nodes=nodes, edges=edge_objects, topic=data["title"], category=detect_category(data["title"], cleaned))
+    cache.set(cache_key, result.model_dump())
     return result
 
 
@@ -163,3 +190,21 @@ def find_path(request: PathRequest):
 
     # No path found
     return PathResponse(path=[], steps=[], found=False)
+
+
+@router.get("/music/{artist}")
+def get_music_meta(artist: str):
+    """Fetches links and discography for music entities."""
+    links = fetch_music_links(artist)
+    snippet = fetch_discography_snippet(artist)
+    return {"links": links, "snippet": snippet}
+
+
+@router.post("/graph-insight")
+def get_graph_insight(request: Dict[str, Any]):
+    """Generates an AI-backed 'Vibe-Check' for the current map."""
+    topic = request.get("topic", "the graph")
+    nodes = request.get("nodes", [])
+    edges = request.get("edges", [])
+    insight = generate_graph_insight(topic, nodes, edges)
+    return {"insight": insight}

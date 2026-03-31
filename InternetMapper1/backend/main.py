@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers.query import router as query_router
+from backend.routers.query import router as query_router
 
 app = FastAPI(
     title="Internet Knowledge Mapper API",

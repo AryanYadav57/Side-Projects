@@ -25,12 +25,14 @@ class Edge(BaseModel):
     relation: str                              # CO_OCCURS_WITH, FOUNDED_BY, PART_OF…
     weight: Optional[float] = 1.0             # future: edge strength
     reason: Optional[str] = None              # the sentence explaining the connection
+    year: Optional[int] = None                # year mentioned in the source sentence
 
 
 class GraphResponse(BaseModel):
     nodes: List[Node]
     edges: List[Edge]
     topic: Optional[str] = None
+    category: Optional[str] = "DEFAULT"
 
 
 class ExplainResponse(BaseModel):
