@@ -1,9 +1,10 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 
 class QueryRequest(BaseModel):
     topic: str
+    deep_search: bool = False  # if True, skip Wikipedia and use DuckDuckGo web search
 
 
 class QueryResponse(BaseModel):
@@ -35,3 +36,22 @@ class GraphResponse(BaseModel):
 class ExplainResponse(BaseModel):
     node: str
     summary: str
+
+
+class PathRequest(BaseModel):
+    source: str
+    target: str
+    edges: List[Edge]
+
+
+class PathStep(BaseModel):
+    from_node: str
+    to_node: str
+    relation: str
+    reason: Optional[str] = None
+
+
+class PathResponse(BaseModel):
+    path: List[str]           # ordered list of node IDs
+    steps: List[PathStep]     # each hop with its relationship details
+    found: bool

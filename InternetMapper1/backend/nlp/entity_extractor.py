@@ -3,6 +3,25 @@ from typing import List, Dict
 
 try:
     nlp = spacy.load("en_core_web_sm")
+    # Add custom entity ruler for niche topics
+    if "entity_ruler" not in nlp.pipe_names:
+        ruler = nlp.add_pipe("entity_ruler", before="ner")
+        patterns = [
+            # Fashion & Archive
+            {"label": "ORG", "pattern": "Number (N)ine"},
+            {"label": "ORG", "pattern": "Maison Margiela"},
+            {"label": "ORG", "pattern": "Undercover"},
+            {"label": "ORG", "pattern": "Vetements"},
+            {"label": "ORG", "pattern": "Rick Owens"},
+            {"label": "ORG", "pattern": "Raf Simons"},
+            {"label": "ORG", "pattern": "Yohji Yamamoto"},
+            {"label": "ORG", "pattern": "Comme des Garçons"},
+            # Underground Music
+            {"label": "PERSON", "pattern": "Nettspend"},
+            {"label": "PERSON", "pattern": "Fakemink"},
+            {"label": "PERSON", "pattern": "Llondonactress"},
+        ]
+        ruler.add_patterns(patterns)
 except OSError:
     raise RuntimeError("Run: python -m spacy download en_core_web_sm")
 
