@@ -1,4 +1,5 @@
 import spacy
+from spacy.tokens import Doc
 from backend.services.nlp_engine import get_nlp
 from typing import List, Dict
 
@@ -38,7 +39,7 @@ ENTITY_TYPE_MAP = {
 RELEVANT_TYPES = set(ENTITY_TYPE_MAP.keys())
 
 
-def extract_entities_from_doc(doc: spacy.tokens.Doc) -> List[Dict[str, str]]:
+def extract_entities_from_doc(doc: Doc) -> List[Dict[str, str]]:
     """
     Extract named entities from a pre-processed spaCy doc.
     """

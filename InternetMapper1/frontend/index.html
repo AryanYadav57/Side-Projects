@@ -1811,6 +1811,16 @@
       color: var(--text) !important;
     }
 
+    /* MINI-MAP VIEWFINDER */
+    #mini-map-viewfinder {
+      position: absolute;
+      border: 1px solid var(--accent);
+      background: rgba(168, 85, 247, 0.08);
+      pointer-events: none;
+      transition: width 0.15s ease-out, height 0.15s ease-out, left 0.15s ease-out, top 0.15s ease-out;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+    }
+
     #nd-conns {
       display: flex;
       flex-direction: column;
@@ -3277,7 +3287,7 @@
           <!-- MINI-MAP -->
           <div id="mini-map-wrap" style="position:absolute; top:20px; right:20px; width:120px; height:120px; background:rgba(13,13,18,0.4); border:1px solid var(--border); border-radius:12px; overflow:hidden; backdrop-filter:blur(10px); z-index:5; pointer-events:none;">
             <svg id="mini-map-svg" width="100%" height="100%"></svg>
-            <div id="mini-map-viewfinder" style="position:absolute; border:1px solid var(--accent); background:rgba(168,85,247,0.05); pointer-events:none;"></div>
+            <div id="mini-map-viewfinder"></div>
           </div>
         </div>
 
@@ -3547,7 +3557,7 @@
           loader.classList.remove('on');
           showToast('Search taking longer than expected. Attempting to render...');
         }
-      }, 30000);
+      }, 40000);
 
       const si1 = document.getElementById('si1');
       const si2 = document.getElementById('si2');
@@ -3568,7 +3578,13 @@
       document.getElementById('loader-bar').style.width = '0%';
       document.getElementById('loader').classList.add('on');
       
-      setLoaderStep(1);
+      // Minimum duration helper for loading steps
+      const minStep = (idx, duration = 600) => {
+        setLoaderStep(idx);
+        return new Promise(r => setTimeout(r, duration));
+      };
+
+      await minStep(1, 800);
 
       try {
         const heroCbox = document.getElementById('hero-deep-cbox');
@@ -3601,7 +3617,8 @@
         }
 
         const data = await res.json();
-        setLoaderStep(3);
+        await minStep(2, 600);
+        await minStep(3, 500);
         
         graphData = data;
         setTheme(graphData.category || 'DEFAULT');
@@ -3787,7 +3804,10 @@
       }).map(e => ({ ...e, source: e.source.id || e.source, target: e.target.id || e.target }));
 
       const container = svgSel.append('g');
-      zoomBeh = d3.zoom().scaleExtent([0.08, 6]).on('zoom', e => container.attr('transform', e.transform));
+      zoomBeh = d3.zoom().scaleExtent([0.08, 6]).on('zoom', e => {
+        container.attr('transform', e.transform);
+        updateMinimapViewfinder(e.transform);
+      });
       svgSel.call(zoomBeh).on('click', () => { resetNodeDetail(); updateGraphState(); });
 
       // ── SVG Defs: glow filter + gradients ──
@@ -4005,21 +4025,12 @@
 
         node.attr('transform', d => `translate(${d.x},${d.y})`);
         
-        // Update Mini-map
+        // Update Mini-map points
         const transform = d3.zoomTransform(svgSel.node());
-        const wrapBox = wrap.getBoundingClientRect();
-        
-        // Calculate the bounding box of the nodes in screen space
-        const xMin = d3.min(nodes, d => d.x);
-        const xMax = d3.max(nodes, d => d.x);
-        const yMin = d3.min(nodes, d => d.y);
-        const yMax = d3.max(nodes, d => d.y);
-        
-        const graphW = (xMax - xMin) || 1;
-        const graphH = (yMax - yMin) || 1;
-        const padding = 20;
-        const mmW = 150, mmH = 150;
-        
+        const xMin = d3.min(nodes, d => d.x), xMax = d3.max(nodes, d => d.x);
+        const yMin = d3.min(nodes, d => d.y), yMax = d3.max(nodes, d => d.y);
+        const graphW = (xMax - xMin) || 1, graphH = (yMax - yMin) || 1;
+        const padding = 20, mmW = 120, mmH = 120;
         const scale = Math.min((mmW - padding) / graphW, (mmH - padding) / graphH);
         
         mmNodes.attr('cx', d => (d.x - xMin) * scale + padding/2)
@@ -4029,19 +4040,31 @@
                  const earliest = years.length ? Math.min(...years) : 0;
                  return earliest > currentYearFilter ? 0 : 0.6;
                });
-               
-        // Update Viewfinder
+
+        updateMinimapViewfinder(transform);
+      });
+
+      function updateMinimapViewfinder(transform) {
+        const wrapBox = wrap.getBoundingClientRect();
         const v = document.getElementById('mini-map-viewfinder');
+        if (!v || !nodes.length) return;
+
+        const xMin = d3.min(nodes, d => d.x), xMax = d3.max(nodes, d => d.x);
+        const yMin = d3.min(nodes, d => d.y), yMax = d3.max(nodes, d => d.y);
+        const graphW = (xMax - xMin) || 1, graphH = (yMax - yMin) || 1;
+        const padding = 20, mmDim = 120;
+        const scale = Math.min((mmDim - padding) / graphW, (mmDim - padding) / graphH);
+
         const viewW = (wrapBox.width / transform.k) * scale;
         const viewH = (wrapBox.height / transform.k) * scale;
         const viewX = ((-transform.x / transform.k) - xMin) * scale + padding/2;
         const viewY = ((-transform.y / transform.k) - yMin) * scale + padding/2;
-        
-        v.style.width = Math.max(2, viewW) + 'px';
-        v.style.height = Math.max(2, viewH) + 'px';
+
+        v.style.width = Math.max(4, viewW) + 'px';
+        v.style.height = Math.max(4, viewH) + 'px';
         v.style.left = viewX + 'px';
         v.style.top = viewY + 'px';
-      });
+      }
 
       window._sim = sim;
       updateGraphState();
