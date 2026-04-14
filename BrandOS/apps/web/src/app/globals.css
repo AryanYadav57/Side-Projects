@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+/* ========================================
+   BrandOS — Obsidian Muse Design System
+   v2.0 — Polished Edition
+   ======================================== */
+
+:root {
+  /* Surface Hierarchy (Tonal Layering) */
+  --surface-void: #0f0e0e;
+  --surface: #141313;
+  --surface-low: #1c1b1b;
+  --surface-container: #201f1f;
+  --surface-high: #2b2a2a;
+  --surface-highest: #363434;
+  --surface-bright: #3a3939;
+
+  /* Accent Palette */
+  --primary: #f1c0c0;
+  --primary-container: #d4a5a5;
+  --secondary: #ecbbba;
+  --on-primary: #472829;
+  --on-surface: #e6e1e1;
+  --on-surface-variant: #d4c2c2;
+  --outline: #9d8d8d;
+  --outline-variant: #504444;
+  --muted: #9d8d8d;
+  --tertiary: #d5c9c9;
+  --inverse-surface: #e6e1e1;
+
+  /* Typography */
+  --font-serif: var(--font-newsreader), "Newsreader", Georgia, serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
+
+  /* Motion */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-base: 0.7s;
+  --duration-slow: 1s;
+  --duration-micro: 0.25s;
+}
+
+@theme inline {
+  --color-background: var(--surface);
+  --color-foreground: var(--on-surface);
+  --font-sans: var(--font-manrope);
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* Global Resets */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-highest) var(--surface);
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+body {
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══════════════════════════════════════
+   DEPTH & TEXTURE SYSTEM
+   ═══════════════════════════════════════ */
+
+/* Film Grain Overlay — adds cinematic texture */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
+/* Utility: Ambient Glow */
+.ambient-glow {
+  box-shadow:
+    0 0 40px rgba(230, 225, 225, 0.04),
+    0 0 0 1px rgba(80, 68, 68, 0.06);
+}
+
+/* Utility: Ghost Border — subtle inset ring */
+.ghost-border {
+  box-shadow: inset 0 0 0 1px rgba(80, 68, 68, 0.12);
+}
+
+/* Utility: Card Elevation */
+.card-elevated {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+/* Utility: Glassmorphic surface */
+.glass-surface {
+  background: rgba(28, 27, 27, 0.6);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border: 1px solid rgba(80, 68, 68, 0.1);
+}
+
+/* ═══════════════════════════════════════
+   INTERACTIVE STATES
+   ═══════════════════════════════════════ */
+
+/* Focus ring — accessible, on-brand */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Premium button press effect */
+.btn-press {
+  transition: transform 0.15s var(--ease-spring), box-shadow 0.25s ease;
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ═══════════════════════════════════════
+   ANIMATION KEYFRAMES
+   ═══════════════════════════════════════ */
+
+/* Ambient orb drift */
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(10px, -15px) scale(1.05); }
+  50% { transform: translate(-5px, 10px) scale(0.98); }
+  75% { transform: translate(15px, 5px) scale(1.02); }
+}
+
+.orb-animate {
+  animation: orb-drift 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Shimmer sweep — for skeleton/loading states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(241, 192, 192, 0.04) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Pulse dot — for live indicator */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-live {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Reveal line — for section dividers */
+@keyframes reveal-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.reveal-line {
+  transform-origin: left center;
+  animation: reveal-line 1s var(--ease-cinematic) forwards;
+}
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY REFINEMENTS
+   ═══════════════════════════════════════ */
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth text rendering for large serifs */
+.text-render-crisp {
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Label style — used across the app */
+.label-micro {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--outline);
+}
+
+/* ═══════════════════════════════════════
+   FORM ELEMENTS
+   ═══════════════════════════════════════ */
+
+textarea:focus {
+  outline: none;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ═══════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════ */
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain-overlay::before { display: none; }
+}

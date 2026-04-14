@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&amp;family=Manrope:wght@200;300;400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#323030",
+                    "surface-container-low": "#1c1b1b",
+                    "on-secondary-fixed": "#2f1314",
+                    "tertiary-container": "#b9aeae",
+                    "tertiary-fixed": "#ece0df",
+                    "on-primary-fixed-variant": "#603e3e",
+                    "primary-fixed-dim": "#ebbbbb",
+                    "on-surface-variant": "#d4c2c2",
+                    "on-primary": "#472829",
+                    "surface-tint": "#ebbbbb",
+                    "surface-bright": "#3a3939",
+                    "on-background": "#e6e1e1",
+                    "on-tertiary-container": "#494241",
+                    "surface-container-high": "#2b2a2a",
+                    "tertiary": "#d5c9c9",
+                    "on-primary-fixed": "#2f1315",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdad9",
+                    "error-container": "#93000a",
+                    "background": "#0a0a0a",
+                    "secondary-fixed": "#ffdad9",
+                    "surface-container-lowest": "#0f0e0e",
+                    "surface-container": "#1a1919",
+                    "on-error": "#690005",
+                    "surface-variant": "#262424",
+                    "outline": "#9d8d8d",
+                    "on-primary-container": "#5c3a3b",
+                    "secondary": "#ecbbba",
+                    "inverse-surface": "#e6e1e1",
+                    "secondary-fixed-dim": "#ecbbba",
+                    "on-tertiary": "#362f2f",
+                    "on-secondary-fixed-variant": "#603d3e",
+                    "on-tertiary-fixed": "#201a1a",
+                    "surface-container-highest": "#363434",
+                    "on-tertiary-fixed-variant": "#4d4545",
+                    "on-surface": "#e6e1e1",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#472828",
+                    "inverse-primary": "#7a5555",
+                    "on-secondary-container": "#d9a9a9",
+                    "surface": "#0a0a0a",
+                    "surface-dim": "#0a0a0a",
+                    "primary-container": "#d4a5a5",
+                    "primary": "#f1c0c0",
+                    "outline-variant": "#504444",
+                    "tertiary-fixed-dim": "#d0c4c3",
+                    "secondary-container": "#603d3e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "2px",
+                    "xl": "4px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Newsreader", "serif"],
+                    "body": ["Manrope", "sans-serif"],
+                    "label": ["Manrope", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        .noir-gradient {
+            background: linear-gradient(135deg, #f1c0c0 0%, #d4a5a5 100%);
+        }
+        .glass-input-container {
+            background: rgba(28, 27, 27, 0.4);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(241, 192, 192, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(241, 192, 192, 0.02);
+        }
+        .premium-glow-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .premium-glow-btn:hover {
+            box-shadow: 0 0 30px rgba(241, 192, 192, 0.2);
+            letter-spacing: 0.15em;
+        }
+        .premium-glow-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: translate(-100%, -100%);
+            transition: transform 0.6s ease;
+        }
+        .premium-glow-btn:hover::after {
+            transform: translate(0%, 0%);
+        }
+        body {
+            letter-spacing: -0.01em;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- Top Navigation -->
+<header class="flex justify-between items-center px-16 w-full fixed top-0 left-0 z-50 bg-[#0a0a0a]/40 backdrop-blur-md h-20 border-b border-white/[0.03]">
+<div class="text-xl font-headline italic font-light tracking-tight text-[#e6e1e1]">The Noir Editor</div>
+<div class="flex items-center gap-12">
+<nav class="hidden md:flex gap-12">
+<a class="font-label tracking-[0.2em] uppercase text-[0.625rem] font-bold text-[#f1c0c0]" href="#">Strategy</a>
+<a class="font-label tracking-[0.2em] uppercase text-[0.625rem] font-bold text-[#e6e1e1]/30 hover:text-[#f1c0c0] transition-colors" href="#">Visuals</a>
+<a class="font-label tracking-[0.2em] uppercase text-[0.625rem] font-bold text-[#e6e1e1]/30 hover:text-[#f1c0c0] transition-colors" href="#">Archive</a>
+</nav>
+<div class="flex items-center gap-6 text-[#d4a5a5]">
+<span class="material-symbols-outlined cursor-pointer hover:text-[#f1c0c0] transition-all opacity-60">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-white/5">
+<img class="w-full h-full object-cover grayscale brightness-90" data-alt="close-up portrait of a creative director in a dark studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArorE1hQr5SeeAw4Dts4yoFlo74i1si8f9F94D3zn3trM8t-H91JgXv7ce90G2MXazJu0esbrZvp_hkjkh8Zp2V2KGrteqXu9sULC0j9bH0THq60XPHPbymzLV6khhP1raLMUL_2JrkUQkIJ47mOXDkRCOysyaLVunHYck-oQqpIR619LUGA6xVOtRTWH53tdQ78gY7xkbaNHZOTetms7LCIUtHgrz1pmwKUoVXs0TNl8HFobTmKMMkZYOcSxsf3IFfxXdhRIohy0"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col justify-between w-72 bg-[#0a0a0a] border-r border-white/[0.03]">
+<div class="flex flex-col gap-24 pt-32">
+<div class="px-10">
+<div class="text-2xl font-headline text-[#d4a5a5] italic tracking-tight leading-none">Cinematic Intelligence</div>
+<div class="text-[#e6e1e1]/20 text-[0.55rem] uppercase tracking-[0.3em] mt-3">Advanced Brand Engine v.4.0</div>
+</div>
+<nav class="flex flex-col gap-1">
+<div class="group flex items-center gap-4 py-4 text-[#f1c0c0] font-bold border-r-[1px] border-[#f1c0c0] pl-10 cursor-pointer bg-white/[0.02]">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline tracking-tight text-xl font-light">Brand Strategy</span>
+</div>
+<div class="group flex items-center gap-4 py-4 text-[#e6e1e1]/40 font-medium pl-10 cursor-pointer hover:bg-white/[0.02] hover:text-[#f1c0c0] transition-all duration-500">
+<span class="material-symbols-outlined text-lg">palette</span>
+<span class="font-headline tracking-tight text-xl font-light">Visual Identity</span>
+</div>
+<div class="group flex items-center gap-4 py-4 text-[#e6e1e1]/40 font-medium pl-10 cursor-pointer hover:bg-white/[0.02] hover:text-[#f1c0c0] transition-all duration-500">
+<span class="material-symbols-outlined text-lg">insights</span>
+<span class="font-headline tracking-tight text-xl font-light">Market Positioning</span>
+</div>
+<div class="group flex items-center gap-4 py-4 text-[#e6e1e1]/40 font-medium pl-10 cursor-pointer hover:bg-white/[0.02] hover:text-[#f1c0c0] transition-all duration-500">
+<span class="material-symbols-outlined text-lg">rocket_launch</span>
+<span class="font-headline tracking-tight text-xl font-light">Launch Plan</span>
+</div>
+</nav>
+</div>
+<div class="px-10 pb-12">
+<button class="w-full noir-gradient text-on-primary py-4 rounded-sm text-[0.625rem] font-bold uppercase tracking-[0.2em] active:scale-[0.98] transition-all premium-glow-btn">
+            New Engine Run
+        </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-72 pt-48 px-24 md:px-32 min-h-screen pb-40">
+<div class="max-w-5xl">
+<!-- Hero Section -->
+<section class="mb-32">
+<div class="mb-8">
+<span class="font-label text-[0.625rem] uppercase tracking-[0.4em] text-primary/60 font-bold">PHASE 1: STRATEGIC INCEPTION</span>
+</div>
+<h1 class="font-headline text-[5rem] lg:text-[6.5rem] leading-[0.95] tracking-[-0.04em] text-on-background mb-12 font-light">
+                What are you <br/><span class="italic text-primary font-light">building?</span>
+</h1>
+<p class="font-body text-xl text-on-surface-variant max-w-2xl leading-relaxed font-light opacity-60">
+                Define the soul of your enterprise. Our engine distills complex concepts into cinematic brand identities through curated intelligence and aesthetic rigor.
+            </p>
+</section>
+<!-- Input Section -->
+<section class="relative mb-40">
+<div class="group relative glass-input-container rounded-sm p-1">
+<textarea class="w-full bg-transparent border-none p-10 text-on-surface font-headline text-3xl font-light placeholder:text-white/5 focus:ring-0 transition-all resize-none leading-tight" placeholder="e.g. A sustainable high-fashion house that uses reclaimed ocean plastics for red-carpet couture..." rows="5"></textarea>
+<div class="flex justify-end p-8 pt-0">
+<button class="noir-gradient text-on-primary px-12 py-5 rounded-sm flex items-center gap-4 font-bold uppercase tracking-[0.2em] text-[0.6875rem] active:scale-[0.98] transition-all premium-glow-btn shadow-2xl shadow-primary/20">
+                        Generate Brand Vision
+                        <span class="material-symbols-outlined text-sm">north_east</span>
+</button>
+</div>
+</div>
+<!-- AI Helpers -->
+<div class="flex flex-wrap items-center gap-4 mt-12 px-2">
+<span class="font-label text-[0.55rem] uppercase tracking-[0.3em] text-on-surface-variant/30 mr-4">Suggested Starting Points:</span>
+<button class="bg-white/[0.03] border border-white/[0.05] text-on-surface-variant/60 px-6 py-2.5 rounded-full text-[0.7rem] font-medium hover:bg-white/[0.08] hover:text-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[0.9rem]">auto_awesome</span>
+                    Suggest an idea
+                </button>
+<button class="bg-white/[0.03] border border-white/[0.05] text-on-surface-variant/60 px-6 py-2.5 rounded-full text-[0.7rem] font-medium hover:bg-white/[0.08] hover:text-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[0.9rem]">diamond</span>
+                    Elevate premium status
+                </button>
+<button class="bg-white/[0.03] border border-white/[0.05] text-on-surface-variant/60 px-6 py-2.5 rounded-full text-[0.7rem] font-medium hover:bg-white/[0.08] hover:text-primary transition-all">
+                    A modern sanctuary for digital nomads
+                </button>
+</div>
+</section>
+<!-- Secondary Detail Section -->
+<section class="grid grid-cols-12 gap-20 pb-20 items-end">
+<div class="col-span-8 aspect-[16/7] rounded-sm overflow-hidden bg-surface-container-low relative group border border-white/[0.03]">
+<img class="w-full h-full object-cover grayscale opacity-30 group-hover:grayscale-[0.5] group-hover:opacity-40 transition-all duration-1000 scale-105 group-hover:scale-100" data-alt="moody architectural interior of a minimalist brutalist concrete building" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWo-1HuHviRGfbqfKzxpSuy6QhzQUNN2JmMPATz4fBRKzQqFE0MIFmRi9GRJXmr_AB-vgu0jPeO65hKHkKqKo0dj3g7dUZXUKwx66dTbGSgbMv6Ykx6oKfgwQVHNYQTXJK4Qi-O7GBEf7prjdC6wczu6e0c08J0dO0LoIl2zYg4JA1WoiVh5Osi1XCYx2xVWLByxe71aOJxp4TnM3CmHIm1cnej-BqYT9-ibGV_h1odD4NppdirjOQkepIJilAZGvq9zE1Byp3Dq0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-90"></div>
+<div class="absolute bottom-10 left-10">
+<div class="font-label text-[0.55rem] uppercase tracking-[0.4em] text-primary/50 mb-3">Aesthetic Framework</div>
+<div class="font-headline text-3xl italic font-light tracking-tight">"The absence of noise."</div>
+</div>
+</div>
+<div class="col-span-4 flex flex-col text-right pb-2">
+<div class="border-t border-white/[0.05] pt-10">
+<h3 class="font-headline text-3xl mb-6 italic font-light">The Noir Methodology</h3>
+<p class="font-body text-sm text-on-surface-variant/40 leading-[1.8] font-light">
+                        We don't just generate data. We weave narratives that command silence and attention. Every brand vision starts with a singular point of truth, refined through the lens of aesthetic precision.
+                    </p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Ambient Effects -->
+<div class="fixed bottom-0 right-0 w-[40vw] h-[40vw] bg-primary/5 blur-[160px] rounded-full pointer-events-none -z-10 opacity-30"></div>
+<div class="fixed top-0 left-0 w-72 h-screen bg-black -z-20"></div>
+</body></html>
