@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "SpecAR",
+    "slug": "specar",
+    "scheme": "specar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.specar.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "SpecAR uses your camera to let you place and preview furniture in your real room using Augmented Reality.",
+        "NSPhotoLibraryUsageDescription": "SpecAR saves screenshots of your AR furniture previews to your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "SpecAR saves AR preview screenshots to your photo library."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0F",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.specar.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "SpecAR uses your camera to show furniture in your real room via Augmented Reality."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow SpecAR to save AR screenshots to your photos.",
+          "savePhotosPermission": "Allow SpecAR to save AR screenshots.",
+          "isAccessMediaLocationEnabled": false
+        }
+      ],
+      "expo-sharing",
+      "expo-status-bar"
+    ]
+  }
+}
